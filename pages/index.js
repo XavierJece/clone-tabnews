@@ -10,9 +10,7 @@ function Home() {
       <p>
         Tenha fé em ti e nas coisas que faz, tenho certeza que vai conseguir!
       </p>
-      <strong>
-        Para finalizar EU TE AMO!
-      </strong>
+      <strong>Para finalizar EU TE AMO!</strong>
     </>
   );
 }
