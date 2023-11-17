@@ -4,7 +4,7 @@
   "description": "Implementação do https:www.tabnews.com.br para o https:curso.dev",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "docker compose -f infra/compose.yaml up -d && next dev",
     "link:check": "prettier --check .",
     "link:fix": "prettier --write .",
     "test": "jest",
