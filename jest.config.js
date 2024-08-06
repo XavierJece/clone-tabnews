@@ -1,18 +1,17 @@
-const dotenv = require('dotenv')
-dotenv.config({ 
-  path: '.env.development' 
+const dotenv = require("dotenv");
+dotenv.config({
+  path: ".env.development",
 });
 
-const nextJest = require('next/jest')
+const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
-  dir: './',
+  dir: "./",
 });
 
-const jestConfig= createJestConfig({
-  moduleDirectories: ['node_modules', '<rootDir>'],
+const jestConfig = createJestConfig({
+  moduleDirectories: ["node_modules", "<rootDir>"],
   testTimeout: 60000,
-})
-
+});
 
 module.exports = jestConfig;

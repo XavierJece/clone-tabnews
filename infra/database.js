@@ -10,10 +10,9 @@ async function query(queryObject) {
   } catch (error) {
     console.log(error);
     throw error;
-  }finally {
+  } finally {
     await client.end();
   }
-  
 }
 
 function getSSLValues() {
@@ -27,7 +26,6 @@ function getSSLValues() {
 }
 
 async function getNewClient() {
-  
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
@@ -45,5 +43,4 @@ async function getNewClient() {
 export default {
   query,
   getNewClient,
-}
-
+};
