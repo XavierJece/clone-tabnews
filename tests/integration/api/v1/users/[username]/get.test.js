@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 describe("GET /api/v1/users/[username]", () => {
-  describe("Anonymous User", () => {
+  describe("Anonymous user", () => {
     test("With exact case match", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -17,7 +17,7 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "MesmoCase",
-          email: "mesmo.case@example.com",
+          email: "mesmo.case@curso.dev",
           password: "senha123",
         }),
       });
@@ -35,7 +35,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "MesmoCase",
-        email: "mesmo.case@example.com",
+        email: "mesmo.case@curso.dev",
         password: "senha123",
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
@@ -54,7 +54,7 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "CaseDiferente",
-          email: "case.diferente@example.com",
+          email: "case.diferente@curso.dev",
           password: "senha123",
         }),
       });
@@ -72,7 +72,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "CaseDiferente",
-        email: "case.diferente@example.com",
+        email: "case.diferente@curso.dev",
         password: "senha123",
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
@@ -94,8 +94,7 @@ describe("GET /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         name: "NotFoundError",
-        message:
-          "O username informado não foi encontrado no sistema. não encontrado.",
+        message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });

@@ -9,22 +9,21 @@ async function findOneByUsername(username) {
   async function runSelectQuery(username) {
     const results = await database.query({
       text: `
-      SELECT 
-        * 
-      FROM
-        users
-      WHERE
-        LOWER(username) = LOWER($1)
-      LIMIT
-        1
-      ;`,
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          LOWER(username) = LOWER($1)
+        LIMIT
+          1
+        ;`,
       values: [username],
     });
 
     if (results.rowCount === 0) {
       throw new NotFoundError({
-        message:
-          "O username informado não foi encontrado no sistema. não encontrado.",
+        message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
       });
     }
@@ -37,14 +36,14 @@ async function create(userInputValues) {
   await validateUniqueEmail(userInputValues.email);
   await validateUniqueUsername(userInputValues.username);
 
-  const newUser = await runInsertQUery(userInputValues);
+  const newUser = await runInsertQuery(userInputValues);
   return newUser;
 
   async function validateUniqueEmail(email) {
     const results = await database.query({
       text: `
-        SELECT 
-          email 
+        SELECT
+          email
         FROM
           users
         WHERE
@@ -52,6 +51,7 @@ async function create(userInputValues) {
         ;`,
       values: [email],
     });
+
     if (results.rowCount > 0) {
       throw new ValidationError({
         message: "O email informado já está sendo utilizado.",
@@ -63,8 +63,8 @@ async function create(userInputValues) {
   async function validateUniqueUsername(username) {
     const results = await database.query({
       text: `
-        SELECT 
-          username 
+        SELECT
+          username
         FROM
           users
         WHERE
@@ -72,6 +72,7 @@ async function create(userInputValues) {
         ;`,
       values: [username],
     });
+
     if (results.rowCount > 0) {
       throw new ValidationError({
         message: "O username informado já está sendo utilizado.",
@@ -80,12 +81,12 @@ async function create(userInputValues) {
     }
   }
 
-  async function runInsertQUery(userInputValues) {
+  async function runInsertQuery(userInputValues) {
     const results = await database.query({
       text: `
-        INSERT INTO 
-          users (username, email, password) 
-        VALUES 
+        INSERT INTO
+          users (username, email, password)
+        VALUES
           ($1, $2, $3)
         RETURNING
           *
@@ -96,14 +97,13 @@ async function create(userInputValues) {
         userInputValues.password,
       ],
     });
-
     return results.rows[0];
   }
 }
 
 const user = {
-  findOneByUsername,
   create,
+  findOneByUsername,
 };
 
 export default user;

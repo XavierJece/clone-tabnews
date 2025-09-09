@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 describe("POST /api/v1/users", () => {
-  describe("Anonymous User", () => {
+  describe("Anonymous user", () => {
     test("With unique and valid data", async () => {
       const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -16,19 +16,20 @@ describe("POST /api/v1/users", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: "testuser",
-          email: "testuser@example.com",
+          username: "filipedeschamps",
+          email: "contato@curso.dev",
           password: "senha123",
         }),
       });
+
       expect(response.status).toBe(201);
 
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: "testuser",
-        email: "testuser@example.com",
+        username: "filipedeschamps",
+        email: "contato@curso.dev",
         password: "senha123",
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
@@ -39,7 +40,7 @@ describe("POST /api/v1/users", () => {
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
     });
 
-    test("With Duplicated 'email", async () => {
+    test("With duplicated 'email'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -47,7 +48,7 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "emailduplicado1",
-          email: "duplicado@example.com",
+          email: "duplicado@curso.dev",
           password: "senha123",
         }),
       });
@@ -61,7 +62,7 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "emailduplicado2",
-          email: "Duplicado@example.com",
+          email: "Duplicado@curso.dev",
           password: "senha123",
         }),
       });
@@ -78,7 +79,7 @@ describe("POST /api/v1/users", () => {
       });
     });
 
-    test("With Duplicated 'username", async () => {
+    test("With duplicated 'username'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -86,7 +87,7 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "usernameduplicado",
-          email: "usernameduplicado1@example.com",
+          email: "usernameduplicado1@curso.dev",
           password: "senha123",
         }),
       });
@@ -100,7 +101,7 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "UsernameDuplicado",
-          email: "usernameduplicado2@example.com",
+          email: "usernameduplicado2@curso.dev",
           password: "senha123",
         }),
       });
