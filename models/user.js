@@ -33,6 +33,37 @@ async function findOneByUsername(username) {
   }
 }
 
+async function findOneByEmail(email) {
+  const userFound = await runSelectQuery(email);
+
+  return userFound;
+
+  async function runSelectQuery(email) {
+    const results = await database.query({
+      text: `
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          LOWER(email) = LOWER($1)
+        LIMIT
+          1
+        ;`,
+      values: [email],
+    });
+
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message: "O email informado não foi encontrado no sistema.",
+        action: "Verifique se o email está digitado corretamente.",
+      });
+    }
+
+    return results.rows[0];
+  }
+}
+
 async function create(userInputValues) {
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
@@ -82,16 +113,16 @@ async function updateByUsername(username, userInputValues) {
     await hashPasswordInObject(userInputValues);
   }
 
-  const uerWIthUpdatedPassword = { ...currentUser, ...userInputValues };
+  const userWithNewValues = { ...currentUser, ...userInputValues };
 
-  const updatedUser = await runUpdateQuery(uerWIthUpdatedPassword);
+  const updatedUser = await runUpdateQuery(userWithNewValues);
   return updatedUser;
 
   function compareValue(value1, value2) {
     return value1.toLowerCase() === value2.toLowerCase();
   }
 
-  async function runUpdateQuery(userInputValues) {
+  async function runUpdateQuery(userWithNewValues) {
     const results = await database.query({
       text: `
         UPDATE
@@ -105,36 +136,16 @@ async function updateByUsername(username, userInputValues) {
           id = $1
         RETURNING
           *
-        ;`,
+      `,
       values: [
-        userInputValues.id,
-        userInputValues.username,
-        userInputValues.email,
-        userInputValues.password,
+        userWithNewValues.id,
+        userWithNewValues.username,
+        userWithNewValues.email,
+        userWithNewValues.password,
       ],
     });
+
     return results.rows[0];
-  }
-}
-
-async function validateUniqueEmail(email) {
-  const results = await database.query({
-    text: `
-      SELECT
-        email
-      FROM
-        users
-      WHERE
-        LOWER(email) = LOWER($1)
-      ;`,
-    values: [email],
-  });
-
-  if (results.rowCount > 0) {
-    throw new ValidationError({
-      message: "O email informado já está sendo utilizado.",
-      action: "Utilize outro email para realizar esta operação.",
-    });
   }
 }
 
@@ -159,6 +170,27 @@ async function validateUniqueUsername(username) {
   }
 }
 
+async function validateUniqueEmail(email) {
+  const results = await database.query({
+    text: `
+      SELECT
+        email
+      FROM
+        users
+      WHERE
+        LOWER(email) = LOWER($1)
+      ;`,
+    values: [email],
+  });
+
+  if (results.rowCount > 0) {
+    throw new ValidationError({
+      message: "O email informado já está sendo utilizado.",
+      action: "Utilize outro email para realizar esta operação.",
+    });
+  }
+}
+
 async function hashPasswordInObject(userInputValues) {
   const hashedPassword = await password.hash(userInputValues.password);
   userInputValues.password = hashedPassword;
@@ -167,6 +199,7 @@ async function hashPasswordInObject(userInputValues) {
 const user = {
   create,
   findOneByUsername,
+  findOneByEmail,
   updateByUsername,
 };
 
