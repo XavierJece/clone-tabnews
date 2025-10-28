@@ -4,12 +4,12 @@ import webserver from "infra/webserver.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
-async function findOneByUserId(userId) {
-  const newToken = await runSelectQuery(userId);
+async function findOneById(id) {
+  const newToken = await runSelectQuery(id);
 
   return newToken;
 
-  async function runSelectQuery(userId) {
+  async function runSelectQuery(id) {
     const results = await database.query({
       text: `
         SELECT
@@ -17,11 +17,11 @@ async function findOneByUserId(userId) {
         FROM
           user_activation_tokens
         WHERE
-          user_id = $1
+          id = $1
         LIMIT
           1
         ;`,
-      values: [userId],
+      values: [id],
     });
 
     return results.rows[0];
@@ -68,7 +68,7 @@ Equipe FinTab`,
 
 const activation = {
   create,
-  findOneByUserId,
+  findOneById,
   sendEmailToUser,
 };
 
