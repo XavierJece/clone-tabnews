@@ -70,11 +70,11 @@ async function deleteAllEmails() {
   });
 }
 
-function extractUUIDs(text) {
+function extractUUID(text) {
   const uuidRegex =
     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
   const matches = text.match(uuidRegex);
-  return matches || [];
+  return matches ? matches[0] : null;
 }
 
 async function getLastEmail() {
@@ -102,8 +102,8 @@ const orchestrator = {
   createUser,
   createSession,
   deleteAllEmails,
+  extractUUID,
   getLastEmail,
-  extractUUIDs,
 };
 
 export default orchestrator;
